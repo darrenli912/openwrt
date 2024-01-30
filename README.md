@@ -8,16 +8,7 @@ copy driver to lede/build_dir/target-mipsel_24kc_musl/linux-ramips_mt76x8/linux-
 
 build_dir/linux-ar71xx_generic/linux-3.3.8/drivers/usb/serial/
 
-root@OpenWrt:/etc# cat firewall.user
-# This file is interpreted as shell script.
-# Put your custom iptables rules here, they will
-# be executed with each firewall (re-)start.
-
-# Internal uci firewall chains are flushed and recreated on reload, so
-# put custom rules into the root chains e.g. INPUT or FORWARD or into the
-# special user chains, e.g. input_wan_rule or postrouting_lan_rule.
-
-
+root@OpenWrt:/etc/firewall.user.
 iptables -t mangle -N XRAY
 iptables -t mangle -A XRAY -d 10.0.0.0/8 -j RETURN
 iptables -t mangle -A XRAY -d 100.64.0.0/10 -j RETURN
@@ -57,17 +48,14 @@ iptables -t mangle -A XRAY_SELF -p tcp -j MARK --set-mark 1
 iptables -t mangle -A XRAY_SELF -p udp -j MARK --set-mark 1
 iptables -t mangle -A OUTPUT -j XRAY_SELF
 
-root@OpenWrt:/etc# cat rc.local
-# Put your custom commands here that should be executed once
-# the system init finished. By default this file does nothing.
-
+root@OpenWrt:/etc/rc.local
 sysctl -w net.ipv4.ip_forward=1
 ip rule add fwmark 1 table 100
 ip route add local 0.0.0.0/0 dev lo table 100
 
 exit 0
 
-root@OpenWrt:/etc/config# cat xray
+root@OpenWrt:/etc/config/xray
 
 config xray 'enabled'
         option enabled '1'
@@ -81,7 +69,7 @@ config xray 'config'
 
 
 
-root@OpenWrt:/etc/config# cat /etc/xray/config.json
+root@OpenWrt:/etc/xray/config.json
 {
         "log": {
                 "dnsLog" : false,
